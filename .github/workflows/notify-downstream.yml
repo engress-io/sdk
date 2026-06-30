@@ -1,0 +1,20 @@
+name: Notify Downstream Repos
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: [engress-io/agent, engress-io/edge, engress-io/core]
+    steps:
+      - name: Trigger downstream CI
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DOWNSTREAM_DISPATCH_TOKEN }}
+          repository: ${{ matrix.repo }}
+          event-type: sdk-released
+          client-payload: '{"version": "${{ github.ref_name }}"}'
