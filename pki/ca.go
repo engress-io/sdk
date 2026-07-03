@@ -19,6 +19,9 @@ import (
 const (
 	clientCNPrefix = "engress-ep-"
 	caOrg          = "Engress"
+	// TunnelServerCN is the TLS server identity presented on tunnel ingress (:4433).
+	// edge_addr is only L3 routing; agents must verify against this CN, not the dial host.
+	TunnelServerCN = "engress-edge-tunnel"
 )
 
 // CA holds a tunnel PKI root used to mint agent client certs and edge server certs.
@@ -131,7 +134,7 @@ func (c *CA) ServerTLSConfig(clientAuth tls.ClientAuthType) (*tls.Config, error)
 	tmpl := &x509.Certificate{
 		SerialNumber: serial,
 		Subject: pkix.Name{
-			CommonName:   "engress-edge-tunnel",
+			CommonName:   TunnelServerCN,
 			Organization: []string{caOrg},
 		},
 		NotBefore:             notBefore,
