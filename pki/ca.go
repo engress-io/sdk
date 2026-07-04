@@ -137,6 +137,7 @@ func (c *CA) ServerTLSConfig(clientAuth tls.ClientAuthType) (*tls.Config, error)
 			CommonName:   TunnelServerCN,
 			Organization: []string{caOrg},
 		},
+		DNSNames:              []string{TunnelServerCN},
 		NotBefore:             notBefore,
 		NotAfter:              notBefore.Add(365 * 24 * time.Hour),
 		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment,
